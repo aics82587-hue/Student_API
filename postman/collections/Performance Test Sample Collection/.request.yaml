@@ -1,0 +1,28 @@
+$kind: http-request
+name: ""
+url: http://localhost:8000/students/15
+method: DELETE
+body:
+  type: json
+  content: "{\r
+
+    \        \"id\": 15,\r
+
+    \        \"student_number\": \"2026-0024\",\r
+
+    \        \"first_name\": \"Amethyst\",\r
+
+    \        \"last_name\": \"Montefalco\",\r
+
+    \        \"course\": \"BSIT\",\r
+
+    \        \"year_level\": 3\r
+
+    }"
+settings:
+  protocolVersion: auto
+  strictSSL: false
+  followRedirects: true
+  disableCookies: false
+  maxResponseSize: 52428800
+order: 1000
