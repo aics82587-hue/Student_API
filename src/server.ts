@@ -21,8 +21,19 @@ const PORT = process.env.PORT ?? 8000;
 app.use(express.json());
 app.use('/students', studentRoutes);
 
-app.get('/health', (_req: Request, res: Response) => {
-  res.status(200).json({ status: 'ok' });
+app.get('/health', async (_req: Request, res: Response) => {
+  try {
+    await pool.query('SELECT NOW()');
+    res.status(200).json({ status: 'ok', database: 'connected' });
+  } catch (error: unknown) {
+    const details = error as { code?: unknown; message?: unknown };
+    res.status(503).json({
+      status: 'error',
+      database: 'disconnected',
+      code: typeof details.code === 'string' ? details.code : 'UNKNOWN',
+      message: typeof details.message === 'string' ? details.message : 'Database unavailable'
+    });
+  }
 });
 
 if (process.env.NODE_ENV !== 'test') {
