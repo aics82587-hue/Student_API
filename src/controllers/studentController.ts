@@ -12,6 +12,7 @@ export const getStudents = async (req: Request, res: Response) => {
       : await pool.query('SELECT * FROM students ORDER BY id;');
     res.json(result.rows);
   } catch (error) {
+    console.error('Could not load students:', error);
     res.status(500).json({ message: 'Could not load students' });
   }
 };

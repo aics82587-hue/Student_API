@@ -21,6 +21,10 @@ const PORT = process.env.PORT ?? 8000;
 app.use(express.json());
 app.use('/students', studentRoutes);
 
+app.get('/health', (_req: Request, res: Response) => {
+  res.status(200).json({ status: 'ok' });
+});
+
 if (process.env.NODE_ENV !== 'test') {
   app.listen(PORT, () => {
     console.log(`Student API running at http://localhost:${PORT}`);

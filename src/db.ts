@@ -6,16 +6,21 @@ if (!databaseUrl) {
   throw new Error('DATABASE_URL is missing. Check your .env file.');
 }
 
-export const pool = new Pool({ connectionString: databaseUrl });
+export const pool = new Pool({
+  connectionString: databaseUrl,
+  ssl: process.env.DATABASE_SSL === 'false'
+    ? false
+    : { rejectUnauthorized: false },
+  connectionTimeoutMillis: 10_000,
+  idleTimeoutMillis: 30_000
+});
 
 pool.query('SELECT NOW()')
   .then(() => console.log('Database connected successfully'))
   .catch((error: unknown) => {
-    const code =
-      typeof error === 'object' && error !== null && 'code' in error
-        ? ` (PostgreSQL ${String(error.code)})`
-        : '';
-    console.error(
-      `Database connection failed${code}. Check your Supabase credentials and connection settings.`
-    );
+    const details =
+      typeof error === 'object' && error !== null
+        ? error
+        : new Error(String(error));
+    console.error('Database connection failed:', details);
   });
