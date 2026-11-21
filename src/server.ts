@@ -21,6 +21,16 @@ const PORT = process.env.PORT ?? 8000;
 app.use(express.json());
 app.use('/students', studentRoutes);
 
+app.get('/', (_req: Request, res: Response) => {
+  res.json({
+    name: 'Student API',
+    endpoints: {
+      students: '/students',
+      health: '/health'
+    }
+  });
+});
+
 app.get('/health', async (_req: Request, res: Response) => {
   try {
     await pool.query('SELECT NOW()');
